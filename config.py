@@ -8,9 +8,10 @@ class Config:
         pass
 
 class DevelopmentConfig(Config):
-    pass
+    DEBUG = True
 
 class TestingConfig(Config):
+    TESTING = True
     pass
 
 class ProductionConfig(Config):
