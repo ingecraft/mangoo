@@ -7,8 +7,6 @@ class Lead(db.Model):
     surname = db.Column(db.String(64))
     phone_number = db.Column(db.String(10))
     email = db.Column(db.String(64), unique=True, index=True)
-    phone_call_id = db.Column(db.Integer, db.ForeignKey('phone_calls.id'))
-    phone_call = db.relationship('PhoneCall')
 
     def __repr__(self):
         return '<Lead %r>' % self.email
@@ -25,16 +23,38 @@ class Operator(db.Model):
     __tablename__ = 'operators'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, index=True)
-    phone_call = db.relationship("PhoneCall", uselist=False, back_populates="operators")
 
     def __repr__(self):
         return '<User %r>' % self.username
 
-class PhoneCall(db.Model):
-    __tablename__ = 'phone_calls'
+class Call(db.Model):
+    __tablename__ = 'calls'
     id = db.Column(db.Integer, primary_key=True)
-    datetime = db.Column(db.DateTime, index=True)
-    operator_id = db.Column(db.Integer, db.ForeignKey('operator.id'))
-    operator = db.relationship("Operator", back_populates="phone_calls") 
+    time_called = db.Column(db.DateTime, index=True)
 
+    def __repr__(self):
+        pass
+
+class Callback(db.Model):
+    __tablename__ = 'callbacks'
+    id = db.Column(db.Integer, primary_key=True)
+    active = db.Column(db.Boolean)
+    callback_time = db.Column(db.DateTime, index=True)
+
+    def __repr__(self):
+        pass
+
+class Success(db.Model):
+    __tablename__ = 'successes'
+    id = db.Column(db.Integer, primary_key=True)
+
+    def __repr__(self):
+        pass
+    
+class Pass(db.Model):
+    __tablename__ = 'passes'
+    id = db.Column(db.Integer, primary_key=True)
+
+    def __repr__(self):
+        pass
 
