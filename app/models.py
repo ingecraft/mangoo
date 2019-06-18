@@ -26,7 +26,7 @@ class User(db.Model):
     surname = db.Column(db.String(64)) 
     password = db.Column(db.String(64))
     calls = db.relationship("Call", backref='user')
-    callbacks = db.relationship("Call", backref='creator')
+    callbacks = db.relationship("Callback", backref='creator')
     donations = db.relationship("Donation", backref='owner')
     passes = db.relationship("Pass", backref='owner')
 
@@ -38,13 +38,19 @@ class Call(db.Model):
     __tablename__ = 'calls'
     id = db.Column(db.Integer, primary_key=True)
     call_datetime = db.Column(db.DateTime, index=True)
-    call_outcome = db.Column(db.Enum)
+    call_outcome_id = db.Column(db.Integer, db.ForeignKey('call_outcomes.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     lead_id = db.Column(db.Integer, db.ForeignKey('leads.id'))
 
     def __repr__(self):
         pass
 
+class CallOutcome(db.Model):
+    __tablename__ = 'call_outcomes'
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(128))
+    abbreviation = db.Column(db.String(8))
+    calls = db.relationship("Call", backref='outcome')
 
 class Callback(db.Model):
     __tablename__ = 'callbacks'
@@ -61,9 +67,9 @@ class Callback(db.Model):
 class Donation(db.Model):
     __tablename__ = 'donations'
     id = db.Column(db.Integer, primary_key=True)
-    frequency = db.Column(db.Enum)
+    # frequency = db.Column(db.Enum)
     amount = db.Column(db.Integer)
-    payment_type = db.Column(db.Enum)
+    # payment_type = db.Column(db.Enum)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
     lead_id = db.Column(db.Integer, db.ForeignKey('leads.id')) 
 
@@ -74,7 +80,7 @@ class Donation(db.Model):
 class Pass(db.Model):
     __tablename__ = 'passes'
     id = db.Column(db.Integer, primary_key=True)
-    reason = db.Column(db.Enum)   
+    # reason = db.Column(db.Enum)   
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     lead_id = db.Column(db.Integer, db.ForeignKey('leads.id')) 
 
